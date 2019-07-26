@@ -14,6 +14,7 @@ from sklearn.metrics import f1_score
 import numpy as np
 from pprint import pprint
 import time
+import pickle
 
 class achieve:
     # 读xml文档
@@ -106,6 +107,8 @@ class achieve:
     def sklearnLR(self,train_set,train_tag,dev_set,dev_tag):
         logreg = LogisticRegression(C=1,max_iter=100,solver='lbfgs',multi_class='multinomial')
         logreg.fit(train_set,train_tag)
+        with open("LR.pkl",'wb') as f:
+            pickle.dump(logreg,f)
         predict=logreg.predict(dev_set)  #用训练的模型Log来预测测试数据
         print(predict)
         f1 = f1_score(dev_tag, predict,average='micro')
@@ -115,6 +118,8 @@ class achieve:
     def sklearnSVM(self,train_set,train_tag,dev_set,dev_tag):
         clf = svm.LinearSVC(C=0.0665,dual=False) # 使用线性核dual=True,max_iter=1000,loss=‘hinge’ or ‘squared_hinge’,tol=
         clf.fit(train_set,train_tag)
+        with open("SVM.pkl",'wb') as f:
+            pickle.dump(clf,f)
         predict=clf.predict(dev_set)  #用训练的模型Log来预测测试数据
         print(predict)
         f1 = f1_score(dev_tag, predict,average='micro')
@@ -124,6 +129,8 @@ class achieve:
     def sklearnRF(self,train_set,train_tag,dev_set,dev_tag):
         clf = RandomForestClassifier(n_estimators=100,max_features='log2',random_state=1)
         clf.fit(train_set,train_tag)
+        with open("RF.pkl",'wb') as f:
+            pickle.dump(clf,f)
         predict=clf.predict(dev_set)  #用训练的模型Log来预测测试数据
         print(predict)
         f1 = f1_score(dev_tag, predict,average='micro')
